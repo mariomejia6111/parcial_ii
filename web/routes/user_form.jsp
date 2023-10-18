@@ -1,19 +1,19 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="models.User"%>
 <%@page import="jakarta.servlet.http.HttpSession" %>
-<%@page import="models.Team"%>
-<%@page import="models.User" %>
 <!DOCTYPE html>
 <html>
     <head>
         <%
             boolean actionType = (request.getAttribute("action") == null) ? true : false;
-            Team team = null;
+            User updatingUser = null;
+            HttpSession authSession = request.getSession(false);
             if (!actionType) {
-                team = (Team)request.getAttribute("team");
+                updatingUser = (User)request.getAttribute("user");
             }
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title><%= (actionType) ? "Registro" : "Edición" %> de equipo</title>
+        <title><%= (actionType) ? "Creación" : "Actualización" %> de Usuario</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
         <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -21,21 +21,15 @@
     </head>
     <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
         <div class="wrapper">
+            <% 
+                if (authSession != null && authSession.getAttribute("logged") != null) {
+                    User user = (User)authSession.getAttribute("logged");
+            %>
+                <%@include file="menu.jsp" %>
+                <%@include file="sidebar.jsp" %>
             <%
-                User user = null;
-                HttpSession authSession = request.getSession(false);
-                if (authSession == null || authSession.getAttribute("logged") == null) {
-                    request.setAttribute("alert-type", "danger");
-                    request.setAttribute("alert-title", "Alto");
-                    request.setAttribute("alert-icon", "ban");
-                    request.setAttribute("alert-message", "Inicia Sesión primero");
-                    request.getRequestDispatcher("/").forward(request, response);
-                } else {
-                    user = (User)authSession.getAttribute("logged");
                 }
             %>
-            <%@include file="menu.jsp" %>
-            <%@include file="sidebar.jsp" %>
             <div class="container" style="margin-top: 90px;">
                 <%
                     String alertTitle = (String)request.getAttribute("alert-title");
@@ -51,35 +45,40 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                Agregar Nuevo Equipo
+                                Registro de Usuario
                             </div>
                             <div class="card-body">
-                                <form action="<%= (actionType) ? "NewTeam" : "UpdateTeam" %>" method="POST" enctype="multipart/form-data">
+                                <form action="<%= (actionType) ? "NewUser" : "UpdateUser" %>" method="POST">
                                     <% if (!actionType) { %> 
-                                        <input type="hidden" name="id" value="<%= team.getId() %>"/>
+                                        <input type="hidden" name="id" value="<%= updatingUser.getId() %>"/>
+                                    <% } %>
+                                    <% if (authSession == null || authSession.getAttribute("logged") == null) { %>
+                                        <input type="hidden" name="get-auth" value="1"/>
                                     <% } %>
                                     <div class="form-group">
-                                        <label for="team-name-id" class="form-label">Nombre del equipo:</label>
-                                        <input type="text" class="form-control" id="teamName" name="team-name" value="<%= (actionType) ? "" : team.getTeamName() %>" autocomplete="off" required>
+                                        <label for="email">Correo:</label>
+                                        <input type="email" class="form-control" id="email" name="email" value="<%= (actionType) ? "" : updatingUser.getEmail() %>" autocomplete="off" required>
                                     </div>
-                                    <% if (!actionType) { %>
-                                        <div class="form-group">
-                                            <h5>Imagen Actual:</h5>
-                                            <img width="100" src="<%= request.getContextPath() + team.getTeamImg() %>"/>
-                                        </div>
-                                    <% } %>
                                     <div class="form-group">
-                                        <label for="team-img-id" class="form-label">Imagen del equipo:</label>
-                                        <input type="file" class="form-control" id="teamImage" name="team-img" accept="image/*" <%= (actionType) ? "required" : "" %>>
+                                        <label for="username">Nombre de Usuario:</label>
+                                        <input type="text" class="form-control" id="username" name="username" value="<%= (actionType) ? "" : updatingUser.getUsername() %>" autocomplete="off" required>
                                     </div>
-                                    <input type="submit" class="btn btn-primary" value="<%= (actionType) ? "Registrar" : "Editar" %> Equipo"/>
+                                    <div class="form-group">
+                                        <label for="password">Contraseña:</label>
+                                        <input type="text" class="form-control" id="password" name="password" value="<%= (actionType) ? "" : updatingUser.getPassword() %>" autocomplete="off" required>
+                                    </div>
+                                    <input type="submit" class="btn btn-primary" value="<%= (actionType) ? "Registrar" : "Actualizar" %> Usuario"/>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <%@include file="footer.jsp" %>
+            <%
+                if (authSession != null && authSession.getAttribute("logged") != null) {
+            %>
+                <%@include file="./footer.jsp" %>
+            <% } %>
         </div>
         <script src="plugins/jquery/jquery.min.js"></script>
         <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -90,6 +89,5 @@
         <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
         <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
         <script src="plugins/chart.js/Chart.min.js"></script>
-        <script>
     </body>
 </html>

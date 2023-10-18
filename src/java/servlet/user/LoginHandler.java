@@ -41,7 +41,7 @@ public class LoginHandler extends HttpServlet {
             request.getRequestDispatcher("/").forward(request, response);
         } else {
             request.getSession().setAttribute("logged", user);
-            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("./routes/dashboard.jsp").forward(request, response);
         }
     }
     @Override

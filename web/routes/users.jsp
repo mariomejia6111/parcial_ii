@@ -1,22 +1,16 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="jakarta.servlet.http.HttpSession" %>
-<%@page import="models.Team" %>
 <%@page import="models.User" %>
 <%@page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Equipos</title>
+        <title>Usuarios</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-        <link rel="stylesheet" href="css/adminlte.min.css"/>
-        <style>
-            td, tr {
-                vertical-align: middle !important;
-            }
-        </style>
+        <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+        <link rel="stylesheet" href="../css/adminlte.min.css"/>
     </head>
     <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
         <div class="wrapper">
@@ -48,67 +42,66 @@
                 <% } %>
                 <div class="card">
                     <div class="card-header border-transparent">
-                      <h3 class="card-title">Equipos Ingresados</h3>
+                      <h3 class="card-title">Usuarios Registrados</h3>
                     </div>
                     <div class="card-body p-0">
                       <div class="table-responsive">
                         <table class="table m-0">
                           <thead>
                           <tr>
-                            <th>Nombre</th>
-                            <th>Imagen</th>
+                            <th>Correo</th>
+                            <th>Nombre de Usuario</th>
                             <th>Acciones</th>
                           </tr>
                           </thead>
                           <tbody>
-                              <%
-                                  List<Team> teams = (List)request.getAttribute("teams");
-                                    if (teams == null) {
-                                        request.getRequestDispatcher("Teams").forward(request, response);
-                                    }
-                                    for (Team team: teams) {
-                              %>
+                            <%
+                                List<User> users = (List)request.getAttribute("users");
+                                if (users == null) {
+                                    request.getRequestDispatcher("Users").forward(request, response);
+                                }
+                                for (User userItem: users) {
+                            %>
                                 <tr>
-                                    <td><%= team.getTeamName() %></td>
-                                    <td><img width="100" src="<%= request.getContextPath() + team.getTeamImg() %>" alt="<%= team.getTeamName() %>"/></td>
+                                    <td><%= userItem.getEmail() %></td>
+                                    <td><%= userItem.getUsername() %></td>
                                     <td>
                                         <div class="row justify-content-center">
                                             <div class="col-md-6">
-                                                <form action="UpdateTeam" method="GET">
-                                                    <input type="hidden" name="id" value="<%= team.getId() %>"/>
+                                                <form action="UpdateUser" method="GET">
+                                                    <input type="hidden" name="id" value="<%= userItem.getId() %>"/>
                                                     <input type="submit" class="btn btn-primary" value="Actualizar"/>
                                                 </form>
                                             </div>
                                             <div class="col-md-6">
-                                                <form action="DeleteTeam" method="POST">
-                                                    <input type="hidden" name="id" value="<%= team.getId() %>"/>
-                                                    <input type="hidden" name="img" value="<%= team.getTeamImg() %>"/>
+                                                <form action="DeleteUser" method="POST">
+                                                    <input type="hidden" name="id" value="<%= userItem.getId() %>"/>
                                                     <input type="submit" class="btn btn-primary" value="Eliminar"/>
                                                 </form>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                              <% } %>
+                            <% } %>
                           </tbody>
                         </table>
                       </div>
                     </div>
                     <div class="card-footer clearfix">
-                      <a href="./team_form.jsp" class="btn btn-sm btn-info float-left">Ingresar Nuevo Equipo</a>
+                      <a href="./user_form.jsp" class="btn btn-sm btn-info float-left">Ingresar Usuario</a>
                     </div>
                 </div>
             </div>
-            <%@include file="footer.jsp" %>
+            <%@include file="./footer.jsp" %>
         </div>
-        <script src="plugins/jquery/jquery.min.js"></script>
-        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-        <script src="js/adminlte.min.js"></script>
-        <script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-        <script src="plugins/raphael/raphael.min.js"></script>
-        <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
-        <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
-        <script src="plugins/chart.js/Chart.min.js"></script>
+        <script src="../plugins/jquery/jquery.min.js"></script>
+        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <script src="../js/adminlte.min.js"></script>
+        <script src="../plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+        <script src="../plugins/raphael/raphael.min.js"></script>
+        <script src="../plugins/jquery-mapael/jquery.mapael.min.js"></script>
+        <script src="../plugins/jquery-mapael/maps/usa_states.min.js"></script>
+        <script src="../plugins/chart.js/Chart.min.js"></script>
     </body>
 </html>

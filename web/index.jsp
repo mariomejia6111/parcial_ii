@@ -15,7 +15,7 @@
         <%
             HttpSession authSession = request.getSession(false);
             if (authSession != null && authSession.getAttribute("logged") != null) {
-                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher("./routes/dashboard.jsp").forward(request, response);
             }
             String alertTitle = (String)request.getAttribute("alert-title");
                 if (alertTitle != null) {
@@ -23,7 +23,7 @@
                     String alertContent = (String)request.getAttribute("alert-message");
                     String alertType = (String)request.getAttribute("alert-type");
         %>
-            <%@include file="alert.jsp" %>
+        <%@include file="./routes/alert.jsp" %>
         <% } %>
         <div class="login-box">
             <div class="login-logo">
@@ -56,7 +56,7 @@
                         </div>
                     </form>
                     <div>
-                        <a href="./user_form.jsp">Registrarse</a>
+                        <a href="./routes/user_form.jsp">Registrarse</a>
                     </div>
                 </div>
             </div>

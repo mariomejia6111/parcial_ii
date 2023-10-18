@@ -99,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <%@include file="footer.jsp" %>
+            <%@include file="./footer.jsp" %>
         </div>
         <script src="plugins/jquery/jquery.min.js"></script>
         <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

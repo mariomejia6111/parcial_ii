@@ -3,8 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/aleja.ALEJA/Desktop/parcial_ii/src/java/servlet/user/DeleteUser.java</file>
-            <file>file:/C:/Users/aleja.ALEJA/Desktop/parcial_ii/src/java/servlet/user/UpdateUser.java</file>
+            <file>file:/C:/Users/ESTUDIANTES-CRI/Desktop/parcial_ii/web/index.jsp</file>
+            <file>file:/C:/Users/ESTUDIANTES-CRI/Desktop/parcial_ii/web/routes/teams.jsp</file>
+            <file>file:/C:/Users/ESTUDIANTES-CRI/Desktop/parcial_ii/src/conf/persistence.xml</file>
+            <file>file:/C:/Users/ESTUDIANTES-CRI/Desktop/parcial_ii/web/routes/team_form.jsp</file>
+            <file>file:/C:/Users/ESTUDIANTES-CRI/Desktop/parcial_ii/web/routes/users.jsp</file>
+            <file>file:/C:/Users/ESTUDIANTES-CRI/Desktop/parcial_ii/web/routes/dashboard.jsp</file>
+            <file>file:/C:/Users/ESTUDIANTES-CRI/Desktop/parcial_ii/src/java/servlet/user/LoginHandler.java</file>
+            <file>file:/C:/Users/ESTUDIANTES-CRI/Desktop/parcial_ii/web/routes/user_form.jsp</file>
         </group>
     </open-files>
 </project-private>

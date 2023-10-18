@@ -150,7 +150,7 @@
                     let li = document.createElement('li')
                     let img = document.createElement('img')
                     let span = document.createElement('span')
-                    img.src = './img/user.png'
+                    img.src = 'img/user.png'
                     img.width = 50
                     span.textContent = item.username
                     span.className = 'user-list-name'
