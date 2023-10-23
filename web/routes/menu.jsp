@@ -5,13 +5,19 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="routes/dashboard.jsp" class="nav-link">Inicio</a>
+            <a href="routes/" class="nav-link">Inicio</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="routes/user_form.jsp" class="nav-link">Nuevo Usuario</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="Users" class="nav-link">Usuarios</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="routes/player_form.jsp" class="nav-link">Nuevo Jugador</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="Players" class="nav-link">Jugadores</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="routes/team_form.jsp" class="nav-link">Nuevo Equipo</a>

@@ -8,36 +8,33 @@ import jakarta.servlet.http.HttpServletResponse;
 import controllers.UserCt;
 import jakarta.servlet.http.HttpSession;
 import models.User;
+import tools.RequestDelegation;
 @WebServlet(name = "DeleteUser", urlPatterns = {"/DeleteUser"})
 public class DeleteUser extends HttpServlet {
     private final UserCt controller = new UserCt();
+    private final RequestDelegation delegation = new RequestDelegation();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Users").forward(request, response);
+        delegation.home(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String type = "success", title = "Operación Completa", icon = "check", message = "Se eliminó el usuario", route = "Users";
         int id = Integer.parseInt(request.getParameter("id"));
         User currentUser = (User)request.getSession().getAttribute("logged");
-        String route = "";
         if (currentUser.getId() == id) {
             HttpSession formerSession = request.getSession(false);
             formerSession.invalidate();
-            request.setAttribute("alert-type", "success");
-            request.setAttribute("alert-title", "¡Éxito!");
-            request.setAttribute("alert-icon", "check");
-            request.setAttribute("alert-message", "Has eliminado tu usuario");
+            message = message + ", pero debes iniciar sesión";
             route = "/";
-        } else {
-            route = "Users";
         }
         controller.delete(id);
-        request.getRequestDispatcher(route).forward(request, response);
+        delegation.operationResponse(route, type, title, icon, message, request, response);
     }
     @Override
     public String getServletInfo() {

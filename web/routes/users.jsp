@@ -7,15 +7,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Usuarios</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-        <link rel="stylesheet" href="../css/adminlte.min.css"/>
+        <base href="${pageContext.request.contextPath}/"/>
+        <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="css/adminlte.min.css"/>
+        <style> td, tr { vertical-align: middle !important; } .width-100 { width: 100%; } </style>
     </head>
     <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
         <div class="wrapper">
             <%
-                User user = null;
+                /*User user = null;
                 HttpSession authSession = request.getSession(false);
                 if (authSession == null || authSession.getAttribute("logged") == null) {
                     request.setAttribute("alert-type", "danger");
@@ -25,10 +25,10 @@
                     request.getRequestDispatcher("/").forward(request, response);
                 } else {
                     user = (User)authSession.getAttribute("logged");
-                }
+                }*/
             %>
             <%@include file="menu.jsp" %>
-            <%@include file="sidebar.jsp" %>
+            <!--< %@include file="sidebar.jsp" %>-->
             <div class="container" style="margin-top: 90px;">
                 <%
                     String alertTitle = (String)request.getAttribute("alert-title");
@@ -51,7 +51,7 @@
                           <tr>
                             <th>Correo</th>
                             <th>Nombre de Usuario</th>
-                            <th>Acciones</th>
+                            <th class="text-center">Acciones</th>
                           </tr>
                           </thead>
                           <tbody>
@@ -65,18 +65,18 @@
                                 <tr>
                                     <td><%= userItem.getEmail() %></td>
                                     <td><%= userItem.getUsername() %></td>
-                                    <td>
-                                        <div class="row justify-content-center">
-                                            <div class="col-md-6">
+                                    <td style="width: 200px;">
+                                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                                            <div class="width-100">
                                                 <form action="UpdateUser" method="GET">
                                                     <input type="hidden" name="id" value="<%= userItem.getId() %>"/>
-                                                    <input type="submit" class="btn btn-primary" value="Actualizar"/>
+                                                    <input type="submit" class="width-100 btn btn-primary" value="Actualizar"/>
                                                 </form>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="width-100">
                                                 <form action="DeleteUser" method="POST">
                                                     <input type="hidden" name="id" value="<%= userItem.getId() %>"/>
-                                                    <input type="submit" class="btn btn-primary" value="Eliminar"/>
+                                                    <input type="submit" class="width-100 btn btn-primary" value="Eliminar"/>
                                                 </form>
                                             </div>
                                         </div>
@@ -88,20 +88,14 @@
                       </div>
                     </div>
                     <div class="card-footer clearfix">
-                      <a href="./user_form.jsp" class="btn btn-sm btn-info float-left">Ingresar Usuario</a>
+                      <a href="routes/user_form.jsp" class="btn btn-sm btn-info float-left">Ingresar Usuario</a>
                     </div>
                 </div>
             </div>
             <%@include file="./footer.jsp" %>
         </div>
-        <script src="../plugins/jquery/jquery.min.js"></script>
-        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-        <script src="../js/adminlte.min.js"></script>
-        <script src="../plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-        <script src="../plugins/raphael/raphael.min.js"></script>
-        <script src="../plugins/jquery-mapael/jquery.mapael.min.js"></script>
-        <script src="../plugins/jquery-mapael/maps/usa_states.min.js"></script>
-        <script src="../plugins/chart.js/Chart.min.js"></script>
+        <script src="plugins/jquery/jquery.min.js"></script>
+        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="js/adminlte.min.js"></script>
     </body>
 </html>

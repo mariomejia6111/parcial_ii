@@ -8,9 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import models.User;
 import controllers.UserCt;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import tools.RequestDelegation;
+import models.Pair;
 @WebServlet(name = "UpdateUser", urlPatterns = {"/UpdateUser"})
 public class UpdateUser extends HttpServlet {
     private final UserCt controller = new UserCt();
+    private final RequestDelegation delegation = new RequestDelegation();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
@@ -18,18 +23,17 @@ public class UpdateUser extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String strId = request.getParameter("id");
-        if (strId == null) {
-            request.getRequestDispatcher("Users").forward(request, response);
-        }
+        if (strId == null) delegation.forward("Users", request, response);
         int id = Integer.parseInt(strId);
-        User user = controller.getUserById(id);
-        request.setAttribute("user", user);
-        request.setAttribute("action", true);
-        request.getRequestDispatcher("user_form.jsp").forward(request, response);
+        List<Pair<String, Object>> attrs = new ArrayList();
+        attrs.add(new Pair<>("action", true));
+        attrs.add(new Pair<>("user", controller.getUserById(id)));
+        delegation.dataResponse("routes/user_form.jsp", attrs, request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String type = "success", title = "Operación Completa", icon = "check", message = "Se actualizó el usuario", route = "Users";
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             String email = request.getParameter("email");
@@ -40,32 +44,19 @@ public class UpdateUser extends HttpServlet {
             user.setEmail(email);
             user.setUsername(username);
             user.setPassword(password);
-            String route = "";
             if (currentUser.getId() == user.getId()) {
                 HttpSession formerSession = request.getSession(false);
                 formerSession.invalidate();
-                request.setAttribute("alert-type", "success");
-                request.setAttribute("alert-title", "¡Éxito!");
-                request.setAttribute("alert-icon", "check");
-                request.setAttribute("alert-message", "Por favor, Inicia sesión de nuevo");
+                message = message + "pero debees iniciar sesión";
                 route = "/";
-            } else {
-                request.setAttribute("alert-type", "success");
-                request.setAttribute("alert-title", "¡Éxito!");
-                request.setAttribute("alert-icon", "check");
-                request.setAttribute("alert-message", "El usuario ha sido actualizado");
-                route = "Users";
             }
             controller.update(user);
             request.getRequestDispatcher(route).forward(request, response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            request.setAttribute("alert-type", "danger");
-            request.setAttribute("alert-title", "Error...");
-            request.setAttribute("alert-icon", "ban");
-            request.setAttribute("alert-message", "No pudo actualizar el usuario");
-            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            type = "danger"; title = "Error..."; icon = "ban"; message = "No pudo actualizarse el usuario"; route = "routes/user_form.jsp";
         }
+        delegation.operationResponse(route, type, title, icon, message, request, response);
     }
     @Override
     public String getServletInfo() {

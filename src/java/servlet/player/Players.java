@@ -1,36 +1,39 @@
-package servlet.team;
+package servlet.player;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import controllers.TeamCt;
-import java.io.File;
+import jakarta.servlet.http.HttpSession;
+import controllers.PlayerCt;
+import java.util.ArrayList;
+import java.util.List;
 import tools.RequestDelegation;
-@WebServlet(name = "DeleteTeam", urlPatterns = {"/DeleteTeam"})
-public class DeleteTeam extends HttpServlet {
-    private final TeamCt controller = new TeamCt();
+import models.Pair;
+@WebServlet(name = "Players", urlPatterns = {"/Players"})
+public class Players extends HttpServlet {
+    private final PlayerCt controller = new PlayerCt();
     private final RequestDelegation delegation = new RequestDelegation();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        /*HttpSession authSession = request.getSession(false);
+        if (authSession == null || authSession.getAttribute("logged") == null) {
+            request.getRequestDispatcher("/").forward(request, response);
+        }*/
+        List<Pair<String, Object>> attrs = new ArrayList();
+        attrs.add(new Pair<>("players", controller.getAllPlayers()));
+        delegation.dataResponse("routes/players.jsp", attrs, request, response);
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        delegation.home(request, response);
+        processRequest(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String img = request.getParameter("img");
-        File imgFile = new File(getServletContext().getRealPath(img));
-        if (imgFile.exists()) {
-            imgFile.delete();
-        }
-        controller.delete(id);
-        delegation.operationResponse("Teams", "success", "Eliminación Completa", "check", "Se eliminó el equipo", request, response);
+        processRequest(request, response);
     }
     @Override
     public String getServletInfo() {

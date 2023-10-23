@@ -7,20 +7,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import models.User;
 import controllers.UserCt;
+import tools.RequestDelegation;
 @WebServlet(name = "NewUser", urlPatterns = {"/NewUser"})
 public class NewUser extends HttpServlet {
     private final UserCt controller = new UserCt();
+    private final RequestDelegation delegation = new RequestDelegation();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Users").forward(request, response);
+        delegation.home(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String type = "success", title = "Operación Finalizada", icon = "check", message = "Se ingresó el usuario", route = "Users";
         try {
             String email = request.getParameter("email");
             String username = request.getParameter("username");
@@ -33,21 +36,13 @@ public class NewUser extends HttpServlet {
             controller.add(user);
             if (startAuth != null) {
                 request.getSession().setAttribute("logged", user);
-                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher("routes/").forward(request, response);
             }
-            request.setAttribute("alert-type", "success");
-            request.setAttribute("alert-title", "¡Éxito!");
-            request.setAttribute("alert-icon", "check");
-            request.setAttribute("alert-message", "El usuario ha sido insertado");
-            request.getRequestDispatcher("Users").forward(request, response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            request.setAttribute("alert-type", "danger");
-            request.setAttribute("alert-title", "Error...");
-            request.setAttribute("alert-icon", "ban");
-            request.setAttribute("alert-message", "No pudo insertarse el usuario");
-            request.getRequestDispatcher("user_form.jsp").forward(request, response);
+            type = "danger"; title = "Error..."; icon = "ban"; message = "No se pudo registrar el usuario"; route = "routes/user_form.jsp";
         }
+        delegation.operationResponse(route, type, title, icon, message, request, response);
     }
     @Override
     public String getServletInfo() {

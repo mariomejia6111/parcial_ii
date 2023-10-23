@@ -14,15 +14,14 @@
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%= (actionType) ? "Registro" : "Edición" %> de equipo</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <base href="${pageContext.request.contextPath}/"/>
         <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
         <link rel="stylesheet" href="css/adminlte.min.css"/>
     </head>
     <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
         <div class="wrapper">
             <%
-                User user = null;
+                /*User user = null;
                 HttpSession authSession = request.getSession(false);
                 if (authSession == null || authSession.getAttribute("logged") == null) {
                     request.setAttribute("alert-type", "danger");
@@ -32,10 +31,10 @@
                     request.getRequestDispatcher("/").forward(request, response);
                 } else {
                     user = (User)authSession.getAttribute("logged");
-                }
+                }*/
             %>
             <%@include file="menu.jsp" %>
-            <%@include file="sidebar.jsp" %>
+            <!--< %@include file="sidebar.jsp" %>-->
             <div class="container" style="margin-top: 90px;">
                 <%
                     String alertTitle = (String)request.getAttribute("alert-title");
@@ -51,10 +50,10 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                Agregar Nuevo Equipo
+                                Formulario de Equipo
                             </div>
                             <div class="card-body">
-                                <form action="<%= (actionType) ? "NewTeam" : "UpdateTeam" %>" method="POST" enctype="multipart/form-data">
+                                <form action="${pageContext.request.contextPath}/<%= (actionType) ? "NewTeam" : "UpdateTeam" %>" method="POST" enctype="multipart/form-data">
                                     <% if (!actionType) { %> 
                                         <input type="hidden" name="id" value="<%= team.getId() %>"/>
                                     <% } %>
@@ -83,12 +82,6 @@
         </div>
         <script src="plugins/jquery/jquery.min.js"></script>
         <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
         <script src="js/adminlte.min.js"></script>
-        <script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-        <script src="plugins/raphael/raphael.min.js"></script>
-        <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
-        <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
-        <script src="plugins/chart.js/Chart.min.js"></script>
     </body>
 </html>

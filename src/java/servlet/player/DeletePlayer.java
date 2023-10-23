@@ -1,16 +1,16 @@
-package servlet.team;
+package servlet.player;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import controllers.TeamCt;
-import java.io.File;
+import controllers.PlayerCt;
 import tools.RequestDelegation;
-@WebServlet(name = "DeleteTeam", urlPatterns = {"/DeleteTeam"})
-public class DeleteTeam extends HttpServlet {
-    private final TeamCt controller = new TeamCt();
+import java.io.File;
+@WebServlet(name = "DeletePlayer", urlPatterns = {"/DeletePlayer"})
+public class DeletePlayer extends HttpServlet {
+    private final PlayerCt controller = new PlayerCt();
     private final RequestDelegation delegation = new RequestDelegation();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,12 +25,10 @@ public class DeleteTeam extends HttpServlet {
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         String img = request.getParameter("img");
-        File imgFile = new File(getServletContext().getRealPath(img));
-        if (imgFile.exists()) {
-            imgFile.delete();
-        }
+        File photo = new File(getServletContext().getRealPath(img));
+        if (photo.exists()) photo.delete();
         controller.delete(id);
-        delegation.operationResponse("Teams", "success", "Eliminación Completa", "check", "Se eliminó el equipo", request, response);
+        delegation.operationResponse("Players", "success", "Eliminación Completa", "check", "Se eliminó el jugador", request, response);
     }
     @Override
     public String getServletInfo() {

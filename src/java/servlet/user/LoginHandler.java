@@ -8,9 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.User;
 import controllers.UserCt;
+import java.util.ArrayList;
+import java.util.List;
+import models.Pair;
+import tools.RequestDelegation;
 @WebServlet(name = "LoginHandler", urlPatterns = {"/LoginHandler"})
 public class LoginHandler extends HttpServlet {
     private final UserCt controller = new UserCt();
+    private final RequestDelegation delegation = new RequestDelegation();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
@@ -20,11 +25,7 @@ public class LoginHandler extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
-            request.setAttribute("alert-type", "success");
-            request.setAttribute("alert-title", "Log out");
-            request.setAttribute("alert-icon", "check");
-            request.setAttribute("alert-message", "Has cerrado sesión");
-            request.getRequestDispatcher("/").forward(request, response);
+            delegation.operationResponse("/", "success", "Sesión Completa", "check", "Has cerrado sesión", request, response);
         }
     }
     @Override
@@ -34,14 +35,12 @@ public class LoginHandler extends HttpServlet {
         String password = request.getParameter("password");
         User user = controller.getUserByUsername(username);
         if (user == null || (!user.getUsername().equals(username) && !user.getPassword().equals(password))) {
-            request.setAttribute("alert-type", "danger");
-            request.setAttribute("alert-title", "Credenciales Incorrectas");
-            request.setAttribute("alert-icon", "ban");
-            request.setAttribute("alert-message", "Por favor, revisa las credenciales");
-            request.getRequestDispatcher("/").forward(request, response);
+            delegation.operationResponse("routes/", "danger", "Credenciales Incorrectas", "ban", "Por favor, revisa las credenciales", request, response);
         } else {
+            List<Pair<String, Object>> attrs = new ArrayList();
+            attrs.add(new Pair<>("logged", user));
+            delegation.dataResponse("routes/", attrs, request, response);
             request.getSession().setAttribute("logged", user);
-            request.getRequestDispatcher("./routes/dashboard.jsp").forward(request, response);
         }
     }
     @Override

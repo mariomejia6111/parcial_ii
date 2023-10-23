@@ -1,10 +1,10 @@
 package models;
 import java.util.List;
 public class MainData {
-    private int userCount;
-    private int teamCount;
+    private int userCount, teamCount, playerCount;
     private List<User> users;
     private List<Team> teams;
+    private List<Player> players;
     public int getUserCount() {
         return userCount;
     }
@@ -28,5 +28,17 @@ public class MainData {
     }
     public void setTeams(List<Team> teams) {
         this.teams = teams;
+    }
+    public int getPlayerCount() {
+        return playerCount;
+    }
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
+    }
+    public List<Player> getPlayers() {
+        return players;
+    }
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }

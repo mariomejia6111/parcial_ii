@@ -14,9 +14,8 @@
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%= (actionType) ? "Creación" : "Actualización" %> de Usuario</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <base href="${pageContext.request.contextPath}/"/>
         <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
         <link rel="stylesheet" href="css/adminlte.min.css"/>
     </head>
     <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -45,7 +44,7 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                Registro de Usuario
+                                Formulario de Usuario
                             </div>
                             <div class="card-body">
                                 <form action="<%= (actionType) ? "NewUser" : "UpdateUser" %>" method="POST">
@@ -82,12 +81,6 @@
         </div>
         <script src="plugins/jquery/jquery.min.js"></script>
         <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
         <script src="js/adminlte.min.js"></script>
-        <script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-        <script src="plugins/raphael/raphael.min.js"></script>
-        <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
-        <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
-        <script src="plugins/chart.js/Chart.min.js"></script>
     </body>
 </html>

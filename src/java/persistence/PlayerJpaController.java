@@ -6,28 +6,28 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
-import javax.persistence.StoredProcedureQuery;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import models.Team;
+import models.Player;
 import persistence.exceptions.NonexistentEntityException;
-public class TeamJpaController implements Serializable {
-    public TeamJpaController(EntityManagerFactory emf) {
+public class PlayerJpaController implements Serializable {
+    public PlayerJpaController(EntityManagerFactory emf) {
         this.emf = emf;
+    }
+    public PlayerJpaController() {
+        this.emf = Persistence.createEntityManagerFactory("parcial_iiPU");
     }
     private EntityManagerFactory emf = null;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    public TeamJpaController() {
-        this.emf = Persistence.createEntityManagerFactory("parcial_iiPU");
-    }
-    public void create(Team team) {
+    public void create(Player player) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(team);
+            em.persist(player);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -35,19 +35,19 @@ public class TeamJpaController implements Serializable {
             }
         }
     }
-    public void edit(Team team) throws NonexistentEntityException, Exception {
+    public void edit(Player player) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            team = em.merge(team);
+            player = em.merge(player);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                int id = team.getId();
-                if (findTeam(id) == null) {
-                    throw new NonexistentEntityException("The team with id " + id + " no longer exists.");
+                int id = player.getId();
+                if (findPlayer(id) == null) {
+                    throw new NonexistentEntityException("The player with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -62,14 +62,14 @@ public class TeamJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Team team;
+            Player player;
             try {
-                team = em.getReference(Team.class, id);
-                team.getId();
+                player = em.getReference(Player.class, id);
+                player.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The team with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The player with id " + id + " no longer exists.", enfe);
             }
-            em.remove(team);
+            em.remove(player);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -77,17 +77,17 @@ public class TeamJpaController implements Serializable {
             }
         }
     }
-    public List<Team> findTeamEntities() {
-        return findTeamEntities(true, -1, -1);
+    public List<Player> findPlayerEntities() {
+        return findPlayerEntities(true, -1, -1);
     }
-    public List<Team> findTeamEntities(int maxResults, int firstResult) {
-        return findTeamEntities(false, maxResults, firstResult);
+    public List<Player> findPlayerEntities(int maxResults, int firstResult) {
+        return findPlayerEntities(false, maxResults, firstResult);
     }
-    private List<Team> findTeamEntities(boolean all, int maxResults, int firstResult) {
+    private List<Player> findPlayerEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Team.class));
+            cq.select(cq.from(Player.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -98,25 +98,24 @@ public class TeamJpaController implements Serializable {
             em.close();
         }
     }
-    public List<Object[]> getAvailableTeams() {
-        StoredProcedureQuery proc = this.emf.createEntityManager().createStoredProcedureQuery("GetAvailableTeams");
-        @SuppressWarnings("unchecked")        
-        List<Object[]> teams = proc.getResultList();
-        return teams;
+    public List<Player> getPlayers() {
+        TypedQuery<Player> query = getEntityManager().createQuery("SELECT p FROM Player p JOIN p.team t", Player.class);
+        List<Player> results = query.getResultList();
+        return results;
     }
-    public Team findTeam(int id) { 
+    public Player findPlayer(int id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Team.class, id);
+            return em.find(Player.class, id);
         } finally {
             em.close();
         }
     }
-    public int getTeamCount() {
+    public int getPlayerCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Team> rt = cq.from(Team.class);
+            Root<Player> rt = cq.from(Player.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -125,20 +124,3 @@ public class TeamJpaController implements Serializable {
         }
     }
 }
-/*
-    DELIMITER //
-CREATE PROCEDURE GetAvailableTeams()
-	BEGIN
-    	SELECT a.* FROM team AS a LEFT JOIN player AS b ON a.ID = b.teamid GROUP BY a.TEAMNAME HAVING COUNT(b.teamid) < 3;
-    END //
-DELIMITER ;
-
-CALL GetAvailableTeams();
-
-
-
-CREATE PROCEDURE GetTeams() BEGIN SELECT * FROM team; END; 
-
-
-CALL GetTeams();
-*/

@@ -13,6 +13,9 @@ public class TeamCt {
     public List<Team> getTeams() {
         return controller.findTeamEntities();
     }
+    public List<Object[]> getAvailableTeams() {
+        return controller.getAvailableTeams();
+    }
     public Team getTeamById(int id) {
         return controller.findTeam(id);
     }

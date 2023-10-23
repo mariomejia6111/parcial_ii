@@ -15,10 +15,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import tools.RequestDelegation;
+import models.Pair;
 @WebServlet(name = "UpdateTeam", urlPatterns = {"/UpdateTeam"})
 @MultipartConfig
 public class UpdateTeam extends HttpServlet {
     private final TeamCt controller = new TeamCt();
+    private final RequestDelegation delegation = new RequestDelegation();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
@@ -30,14 +35,15 @@ public class UpdateTeam extends HttpServlet {
             request.getRequestDispatcher("Teams").forward(request, response);
         }
         int id = Integer.parseInt(strId);
-        Team team = controller.getTeamById(id);
-        request.setAttribute("team", team);
-        request.setAttribute("action", true);
-        request.getRequestDispatcher("team_form.jsp").forward(request, response);
+        List<Pair<String, Object>> attrs = new ArrayList();
+        attrs.add(new Pair<>("action", true));
+        attrs.add(new Pair<>("team", controller.getTeamById(id)));
+        delegation.dataResponse("routes/team_form.jsp", attrs, request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String type = "success", title = "Operación Completa", icon = "check", message = "Se actualizó la información", route = "Teams";
         try {
             int id = Integer.parseInt((String)request.getParameter("id"));
             String teamName = request.getParameter("team-name");
@@ -64,19 +70,11 @@ public class UpdateTeam extends HttpServlet {
                 updatingTeam.setTeamImg("/teams/" + newImgName);
             }
             controller.update(updatingTeam);
-            request.setAttribute("alert-type", "success");
-            request.setAttribute("alert-title", "¡Éxito!");
-            request.setAttribute("alert-icon", "check");
-            request.setAttribute("alert-message", "El equipo se actualizó");
-            request.getRequestDispatcher("Teams").forward(request, response);
         } catch(Exception e) {
             System.out.println(e.getMessage());
-            request.setAttribute("alert-type", "danger");
-            request.setAttribute("alert-title", "¡Ooops!");
-            request.setAttribute("alert-icon", "ban");
-            request.setAttribute("alert-message", "El equipo no fue actualizado");
-            request.getRequestDispatcher("Teams").forward(request, response);
+            type = "danger"; title = "Error..."; icon = "ban"; message = "No pudo actualizarse la información"; route = "Teams";
         }
+        delegation.operationResponse(route, type, title, icon, message, request, response);
     }
     @Override
     public String getServletInfo() {

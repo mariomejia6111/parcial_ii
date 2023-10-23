@@ -1,0 +1,10 @@
+build.xml
+
+
+.DS_STORE
+build/
+nbproject/
+web/WEB-INF/
+web/plugins/
+web/META-INF
+src/conf/

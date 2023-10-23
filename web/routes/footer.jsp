@@ -1,6 +1,6 @@
 <!-- footer -->
 <footer class="main-footer">
-    <strong>Copyright &copy; 2023 <a href="#">Everlasting Goals</a>.</strong>
+    <strong>Copyright &copy; 2023 <a href="routes/">Everlasting Goals</a>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> 1.0

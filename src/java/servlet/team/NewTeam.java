@@ -14,21 +14,24 @@ import controllers.TeamCt;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import tools.RequestDelegation;
 @WebServlet(name = "NewTeam", urlPatterns = {"/NewTeam"})
 @MultipartConfig
 public class NewTeam extends HttpServlet {
     private final TeamCt controller = new TeamCt();
+    private final RequestDelegation delegation = new RequestDelegation();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/").forward(request, response);
+        delegation.home(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String type = "success", title = "¡Éxito!", icon = "check", message = "Se registró el equipo", route = "Teams";
         try {
             String teamName = request.getParameter("team-name");
             Part teamImgPart = request.getPart("team-img");
@@ -48,19 +51,11 @@ public class NewTeam extends HttpServlet {
             team.setTeamName(teamName);
             team.setTeamImg("/teams/" + imgFilename);
             controller.add(team);
-            request.setAttribute("alert-type", "success");
-            request.setAttribute("alert-title", "¡Éxito!");
-            request.setAttribute("alert-icon", "check");
-            request.setAttribute("alert-message", "El equipo fue registrado");
-            request.getRequestDispatcher("Teams").forward(request, response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            request.setAttribute("alert-type", "danger");
-            request.setAttribute("alert-title", "Error...");
-            request.setAttribute("alert-icon", "ban");
-            request.setAttribute("alert-message", "No pudo registrarse el equipo");
-            request.getRequestDispatcher("Teams").forward(request, response);
+            type = "danger"; title = "Error..."; icon = "ban"; message = "No pudo registrarse el equipo"; route = "routes/team_form.jsp";
         }
+        delegation.operationResponse(route, type, title, icon, message, request, response);
     }
     @Override
     public String getServletInfo() {
