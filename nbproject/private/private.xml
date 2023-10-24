@@ -3,8 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/aleja.ALEJA/Desktop/parcial_ii/src/java/servlet/resources/Main.java</file>
-            <file>file:/C:/Users/aleja.ALEJA/Desktop/parcial_ii/web/routes/index.jsp</file>
+            <file>file:/C:/Users/mario/AndroidStudioProjects/parcial_ii/src/java/models/Goal.java</file>
+            <file>file:/C:/Users/mario/AndroidStudioProjects/parcial_ii/src/java/models/Match.java</file>
+            <file>file:/C:/Users/mario/AndroidStudioProjects/parcial_ii/src/java/persistence/TeamJpaController.java</file>
+            <file>file:/C:/Users/mario/AndroidStudioProjects/parcial_ii/src/java/models/Card.java</file>
+            <file>file:/C:/Users/mario/AndroidStudioProjects/parcial_ii/src/java/models/Team.java</file>
+            <file>file:/C:/Users/mario/AndroidStudioProjects/parcial_ii/src/conf/persistence.xml</file>
+            <file>file:/C:/Users/mario/AndroidStudioProjects/parcial_ii/src/java/models/MainData.java</file>
         </group>
     </open-files>
 </project-private>
